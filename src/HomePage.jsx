@@ -6,10 +6,11 @@ import { useNavigate } from "react-router-dom"
     // input for each tied to piece of state
     //button when clicked: if roomID and username have values, naviagte them to '/chat/roomID'..so would need to be roomID number
 
-function HomePage({setCurrentUser}) {
+function HomePage({setCurrentUser, setCurrentColor}) {
 
     const [roomID, setRoomID] = useState("")
     const [userName, setUserName] = useState("");
+    const [color, setColor] = useState("#000000");
     const navigate = useNavigate();
 
   return (
@@ -17,7 +18,7 @@ function HomePage({setCurrentUser}) {
         <label htmlFor="roomID">Enter Room ID</label>
         <input 
         value={roomID}
-        onChange={(e)=>setRoomID (e.target.value)}
+        onChange={(e)=>setRoomID(e.target.value)}
         type="text" 
         id="roomID"
         />
@@ -29,17 +30,26 @@ function HomePage({setCurrentUser}) {
         type="text"
         id="username" 
         />
-
+          <div>
+              <label htmlFor="color">Chat Color</label>
+              <input
+                  id="color"
+                  value={color}
+                  type="color"
+                  onChange={(e) => setColor(e.target.value)}
+              />
+          </div>
         <button 
         type="submit"
         onClick={(e) => {
             if(roomID && userName){
                 setCurrentUser(userName)
+                setCurrentColor(color);
                 navigate(`/chat/${roomID}`);
             }}
         }
         >
-        SUBMIT
+        Join Room
         </button>
     </div>
   )

@@ -8,7 +8,7 @@ import { useState, useCallback, useEffect, useRef } from "react"
 //TODO Create an array for messages.
 //TODO Return from the hook an array of messages and a function to send a message.
 
-const useSocket = (roomID, username) => {
+const useSocket = (roomID, username, color) => {
     const [messages, setMessages] = useState([])
     // useRef = React pays attention to it, but doesnt re-render.
     //If this is useState, it will trigger oa connect/disconect each time.
@@ -20,20 +20,22 @@ const useSocket = (roomID, username) => {
         //any sort of ref has a current key, which is the current value being put into the ref.
         socketRef.current = socketIoClient("http://localhost:8080", { query: { username, roomID } });
         //Add "ons here:"
-        socketRef.current.on("connect", ({ username }) => {
+        socketRef.current.on("user connect", ({ username }) => {
             let newMsg = {
                 username: "SERVER",
                 body: `${username} has joined the room.`,
+                color: "#00ff00",
             }
-            setMessages(curr => [...curr, newMsg])
+            setMessages((curr) => [...curr, newMsg])
         })
 
-        socketRef.current.on("disconnect", ({ username }) => {
+        socketRef.current.on("user disconnect", ({ username }) => {
             let newMsg = {
                 username: "SERVER",
                 body: `${username} has left the room.`,
+                color: "00ff00",
             }
-            setMessages(curr => [...curr, newMsg])
+            setMessages((curr) => [...curr, newMsg])
         })
         socketRef.current.on("message", (msg) => {
             setMessages((curr) => [...curr, msg])
@@ -45,8 +47,8 @@ const useSocket = (roomID, username) => {
     //TODO emit for message
     const sendMessage = useCallback((body) => {
 
-        socketRef.current.emit("message", { username, body })
-    }, [username])
+        socketRef.current.emit("message", { color, username, body })
+    }, [color, username])
 
     return { messages, sendMessage }
 }

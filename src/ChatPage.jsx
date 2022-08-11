@@ -2,10 +2,10 @@ import React, {useState} from "react"
 import {useParams} from "react-router-dom"
 import useSocket from "./useSocket.js";
 
-function ChatPage({currentUser, }) {
+function ChatPage({currentUser, currentColor }) {
     const[message,setMessage] = useState("")
     const { roomID } = useParams()
-    const{messages, sendMessage} = useSocket(roomID, currentUser)
+    const{messages, sendMessage} = useSocket(roomID, currentUser, currentColor)
 
   return (
     <div>
@@ -13,10 +13,10 @@ function ChatPage({currentUser, }) {
           <div className="messages">
         <label htmlFor="message">Message</label>
         <input 
+        id="message"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        type="text-area" 
-        id="message"
+        type="text" 
         />
         </div>
         <button
@@ -32,7 +32,8 @@ function ChatPage({currentUser, }) {
             <div className="messages-container">
             {messages.map((val,idx)=>(
                 <div key={idx}>
-                    <p>{val.username}:</p>
+                    <p style={{ color: val.color }}>{val.username}:</p>
+                    {val.body}
                 </div>
             ))}
           </div>

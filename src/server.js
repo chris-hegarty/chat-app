@@ -1,5 +1,5 @@
-const express = require("express")
-const app = require("express");
+const express = require("express");
+const app = express();
 const PORT = process.env.PORT ?? 8080;
 
 app.use(express.static(__dirname + "/build"));
@@ -10,7 +10,7 @@ app.get("*", (req, res) => {
 const server = require("http").createServer(app)
 const io = require("socket.io")(server, {
     cors: {
-        origin: "*"
+        origin: "*",
     },
 });
 
@@ -26,14 +26,14 @@ io.on("connection", (socket) => {
     //whats a good anme for when someone connects? It's the first arg
     // then the 2nd arg, username, is the data being sent.
     //set username to an object. 
-    io.to(roomID).emit("connect", { username })
+    io.to(roomID).emit("user connect", { username })
 
     socket.on("message", (msg) => {
         io.to(roomID).emit("message", msg)
     })
 
     socket.on("disconnect", () => {
-        io.to(roomID).emit("disconnect", username)
+        io.to(roomID).emit("user disconnect", { username });
     })
 });
 server.listen(PORT, () => console.log("listening"));
