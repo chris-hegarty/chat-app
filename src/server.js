@@ -8,7 +8,11 @@ app.get("*", (req, res) => {
 });
 //This next line is how you expose your server to sockets.
 const server = require("http").createServer(app)
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, {
+    cors: {
+        origin: "*"
+    },
+});
 
 io.on("connection", (socket) => {
     //create the connection
