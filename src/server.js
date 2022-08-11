@@ -21,7 +21,8 @@ io.on("connection", (socket) => {
     //if its to everyone (all sockets that are connected) its io.emit
     //whats a good anme for when someone connects? It's the first arg
     // then the 2nd arg, username, is the data being sent.
-    io.to(roomID).emit("connect", username)
+    //set username to an object. 
+    io.to(roomID).emit("connect", { username })
 
     socket.on("message", (msg) => {
         io.to(roomID).emit("message", msg)
